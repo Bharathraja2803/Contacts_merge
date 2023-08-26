@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 public class MapMain {
 	private static final String LineSeparator = "-".repeat(90);
 	private static final String UnderLine = "=".repeat(50);
@@ -89,7 +91,64 @@ public class MapMain {
 		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
 		System.out.println(LineSeparator);
 		
+		for(String names : new String[] {"Minnie Mouse","Robin Hood","Jackson Durai"}) {
+			contacts.computeIfAbsent(names, k-> new Contact(names));
+		}
 		
+		System.out.println("Map Contacts -> computeIfAbsent method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
+		
+		for(String names : new String[] {"Minnie Mouse","Robin Hood","Jackson Durai"}) {
+			contacts.computeIfPresent(names, (k,v)-> {v.addEmail("RKB Softwares"); return v;});
+		}
+		
+		System.out.println("Map Contacts -> computeIfPresent method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
+		
+		contacts.replaceAll((k,v) -> {
+			String newMail = k.replaceAll(" ", "").toLowerCase() + "@rkbsoftwares.com";
+			v.replaceEmail("daffy@google.com", newMail);
+			return v;
+		});
+		
+		System.out.println("Map Contacts -> replaceAll method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
+		
+		Contact newDaffy = new Contact("Daffy Jane Duck","daffy.j@duck.com");
+		Contact replacedContact = contacts.replace("Daffy Duck", newDaffy);
+		System.out.println("new Daffy: "+newDaffy);
+		System.out.println("replaced Conatct: "+replacedContact);
+		
+		System.out.println("Map Contacts -> replace method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
+		
+		Contact updatedDaffy = replacedContact.mergeContactData(newDaffy);
+		System.out.println("updated daffy: "+ updatedDaffy);
+		boolean isSuccess = contacts.replace("Daffy Duck", newDaffy, updatedDaffy);
+		if(isSuccess) {
+			System.out.println("Replace sucessfull");
+		}else {
+            System.out.printf("Did not match on both key: %s and value: %s %n".formatted("Daisy Duck", replacedContact));
+		}
+		
+		System.out.println("Map Contacts -> replace(boolean return) method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
+		
+		isSuccess = contacts.remove("Daffy Duck", newDaffy);
+		if(isSuccess) {
+			System.out.println("Replace sucessfull");
+		}else {
+            System.out.printf("Did not match on both key: %s and value: %s %n".formatted("Daisy Duck", newDaffy));
+		}
+		
+		System.out.println("Map Contacts -> remove(boolean return) method\n"+UnderLine);
+		contacts.forEach((k,v) -> System.out.println("Key = "+k+", Value = "+v));
+		System.out.println(LineSeparator);
 	}
 
 }
