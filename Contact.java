@@ -36,6 +36,10 @@ public class Contact {
 		return this.name;
 	}
 	
+	public String getLastNameFirstName() {
+		return this.name.substring(name.indexOf(" ")+1)+", "+name.substring(0,name.indexOf(" "));
+	}
+	
 	@Override
 	public String toString() {
 		return "%s: %s %s".formatted(this.name, this.emails, this.phones);
